@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoCycle - Recycling Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8f0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2e8b57;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #2e8b57;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #24724a;
+        }
+        .examples {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>EcoCycle Recycling Assistant</h1>
+        <p>Enter an item to learn how to properly recycle it and earn points!</p>
+
+        <form action="/recycle" method="POST">
+            <input type="text" name="item" placeholder="What would you like to recycle? (e.g., plastic bottle, paper)" required>
+            <br>
+            <button type="submit">How to Recycle</button>
+        </form>
+
+        <div class="examples">
+            <p>Try these examples: plastic bottle, paper, cardboard, glass, aluminum can, electronics, battery</p>
+        </div>
+    </div>
+</body>
+</html>

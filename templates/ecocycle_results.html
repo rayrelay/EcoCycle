@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycling Guide - EcoCycle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f8f0;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2e8b57;
+        }
+        .instruction {
+            background-color: #f0fff0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #2e8b57;
+            margin: 20px 0;
+        }
+        .points {
+            background-color: #ffe4b2;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        button {
+            background-color: #2e8b57;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Recycling Guide for: {{ item }}</h1>
+
+        <div class="instruction">
+            <h2>How to Recycle:</h2>
+            <p>{{ instruction }}</p>
+        </div>
+
+        {% if points > 0 %}
+        <div class="points">
+            <h2>You've earned {{ points }} EcoPoints!</h2>
+            <p>Keep recycling to earn more rewards and help the environment.</p>
+        </div>
+        {% endif %}
+
+        <button onclick="window.location.href='/'">Check Another Item</button>
+    </div>
+</body>
+</html>
