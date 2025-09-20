@@ -3,67 +3,410 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoCycle - Recycling Assistant</title>
+    <title>EcoCycle - Smart Recycling Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary: #2e8b57;
+            --primary-dark: #24724a;
+            --secondary: #4a90e2;
+            --accent: #f39c12;
+            --light: #f0f8f0;
+            --dark: #333;
+            --gray: #6c757d;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f0f8f0;
         }
-        .container {
+
+        header {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .stat {
+            background-color: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat i {
+            color: var(--primary);
+        }
+
+        .main-content {
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
-        h1 {
-            color: #2e8b57;
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #search-input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        #search-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        #search-results {
+            position: absolute;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .search-result-item:hover {
+            background-color: var(--light);
+        }
+
+        .category-badge {
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background-color: #e8f4f0;
+            color: var(--primary);
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .example-card {
+            background-color: var(--light);
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
             text-align: center;
         }
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            font-size: 16px;
+
+        .example-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        button {
-            background-color: #2e8b57;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
+
+        .example-card i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 10px;
         }
-        button:hover {
-            background-color: #24724a;
-        }
-        .examples {
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             margin-top: 20px;
+        }
+
+        .category-filter {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 20px;
             font-size: 14px;
-            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-filter:hover, .category-filter.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .examples {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-recycle"></i>
+                <h1>EcoCycle</h1>
+            </div>
+
+            <div class="user-stats">
+                <div class="stat">
+                    <i class="fas fa-coins"></i>
+                    <span id="user-points">0</span> pts
+                </div>
+                <div class="stat">
+                    <i class="fas fa-level-up-alt"></i>
+                    Level <span id="user-level">1</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>EcoCycle Recycling Assistant</h1>
-        <p>Enter an item to learn how to properly recycle it and earn points!</p>
+        <div class="main-content">
+            <h2>How can I recycle this?</h2>
+            <p>Enter an item to learn how to properly recycle it and earn EcoPoints!</p>
 
-        <form action="/recycle" method="POST">
-            <input type="text" name="item" placeholder="What would you like to recycle? (e.g., plastic bottle, paper)" required>
-            <br>
-            <button type="submit">How to Recycle</button>
-        </form>
+            <form action="/recycle" method="POST" id="recycle-form">
+                <div class="search-container">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="search-input" name="item" placeholder="What would you like to recycle?" autocomplete="off" required>
+                    <div id="search-results"></div>
+                </div>
 
-        <div class="examples">
-            <p>Try these examples: plastic bottle, paper, cardboard, glass, aluminum can, electronics, battery</p>
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-recycle"></i> How to Recycle
+                </button>
+            </form>
+
+            <div class="categories">
+                <div class="category-filter active" data-category="all">All</div>
+                <div class="category-filter" data-category="Plastic">Plastic</div>
+                <div class="category-filter" data-category="Paper">Paper</div>
+                <div class="category-filter" data-category="Glass">Glass</div>
+                <div class="category-filter" data-category="Metal">Metal</div>
+                <div class="category-filter" data-category="E-Waste">E-Waste</div>
+            </div>
+
+            <div class="examples">
+                <div class="example-card" data-item="plastic bottle">
+                    <i class="fas fa-wine-bottle"></i>
+                    <div>Plastic Bottle</div>
+                </div>
+                <div class="example-card" data-item="paper">
+                    <i class="fas fa-file-alt"></i>
+                    <div>Paper</div>
+                </div>
+                <div class="example-card" data-item="cardboard">
+                    <i class="fas fa-box"></i>
+                    <div>Cardboard</div>
+                </div>
+                <div class="example-card" data-item="glass bottle">
+                    <i class="fas fa-glass-whiskey"></i>
+                    <div>Glass Bottle</div>
+                </div>
+                <div class="example-card" data-item="aluminum can">
+                    <i class="fas fa-beer"></i>
+                    <div>Aluminum Can</div>
+                </div>
+                <div class="example-card" data-item="electronics">
+                    <i class="fas fa-laptop"></i>
+                    <div>Electronics</div>
+                </div>
+                <div class="example-card" data-item="battery">
+                    <i class="fas fa-battery-full"></i>
+                    <div>Battery</div>
+                </div>
+                <div class="example-card" data-item="plastic bag">
+                    <i class="fas fa-shopping-bag"></i>
+                    <div>Plastic Bag</div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <footer>
+        <p>EcoCycle - Making recycling easier and more rewarding</p>
+    </footer>
+
+    <script>
+        // 从URL获取用户数据（在实际应用中会从服务器获取）
+        const urlParams = new URLSearchParams(window.location.search);
+        const points = urlParams.get('points') || 0;
+        const level = urlParams.get('level') || 1;
+
+        document.getElementById('user-points').textContent = points;
+        document.getElementById('user-level').textContent = level;
+
+        // 搜索功能
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+
+            if (query.length < 2) {
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            fetch(`/api/search?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        searchResults.innerHTML = '';
+                        data.forEach(item => {
+                            const div = document.createElement('div');
+                            div.className = 'search-result-item';
+                            div.innerHTML = `
+                                <span>${item.item}</span>
+                                <span class="category-badge">${item.category}</span>
+                            `;
+                            div.addEventListener('click', () => {
+                                searchInput.value = item.item;
+                                searchResults.style.display = 'none';
+                            });
+                            searchResults.appendChild(div);
+                        });
+                        searchResults.style.display = 'block';
+                    } else {
+                        searchResults.style.display = 'none';
+                    }
+                });
+        });
+
+        // 点击外部关闭搜索结果
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // 示例卡片点击事件
+        document.querySelectorAll('.example-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const item = this.getAttribute('data-item');
+                searchInput.value = item;
+                document.getElementById('recycle-form').submit();
+            });
+        });
+
+        // 分类筛选
+        document.querySelectorAll('.category-filter').forEach(filter => {
+            filter.addEventListener('click', function() {
+                const category = this.getAttribute('data-category');
+
+                // 更新激活状态
+                document.querySelectorAll('.category-filter').forEach(f => f.classList.remove('active'));
+                this.classList.add('active');
+
+                // 筛选示例卡片
+                document.querySelectorAll('.example-card').forEach(card => {
+                    const item = card.getAttribute('data-item');
+                    const itemCategory = getItemCategory(item);
+
+                    if (category === 'all' || itemCategory === category) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // 获取物品类别（简化版）
+        function getItemCategory(item) {
+            const categories = {
+                'plastic bottle': 'Plastic',
+                'paper': 'Paper',
+                'cardboard': 'Paper',
+                'glass bottle': 'Glass',
+                'aluminum can': 'Metal',
+                'electronics': 'E-Waste',
+                'battery': 'Hazardous',
+                'plastic bag': 'Plastic'
+            };
+
+            return categories[item] || 'Other';
+        }
+    </script>
 </body>
 </html>

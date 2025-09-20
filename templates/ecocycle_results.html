@@ -4,67 +4,334 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recycling Guide - EcoCycle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --primary: #2e8b57;
+            --primary-dark: #24724a;
+            --secondary: #4a90e2;
+            --accent: #f39c12;
+            --light: #f0f8f0;
+            --dark: #333;
+            --gray: #6c757d;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f0f8f0;
         }
-        .container {
+
+        header {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .stat {
+            background-color: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat i {
+            color: var(--primary);
+        }
+
+        .main-content {
             background-color: white;
             padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
         }
-        h1 {
-            color: #2e8b57;
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
         }
-        .instruction {
-            background-color: #f0fff0;
+
+        .item-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .item-icon {
+            font-size: 40px;
+            color: var(--primary);
+        }
+
+        .item-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .item-category {
+            background-color: #e8f4f0;
+            color: var(--primary);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+        }
+
+        .instruction-card {
+            background-color: var(--light);
             padding: 20px;
             border-radius: 8px;
-            border-left: 5px solid #2e8b57;
-            margin: 20px 0;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary);
         }
-        .points {
-            background-color: #ffe4b2;
+
+        .points-earned {
+            text-align: center;
+            background-color: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border: 2px dashed var(--accent);
+        }
+
+        .points-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--accent);
+            margin: 10px 0;
+        }
+
+        .tips-section {
+            margin-top: 30px;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tip-card {
+            background-color: white;
             padding: 15px;
             border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            margin: 20px 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--secondary);
         }
-        button {
-            background-color: #2e8b57;
-            color: white;
+
+        .tip-card i {
+            color: var(--secondary);
+            margin-right: 10px;
+        }
+
+        .progress-container {
+            margin-top: 30px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--accent);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
             padding: 12px 24px;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 15px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--light);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-recycle"></i>
+                <h1>EcoCycle</h1>
+            </div>
+
+            <div class="user-stats">
+                <div class="stat">
+                    <i class="fas fa-coins"></i>
+                    <span>{{ user_data.points }}</span> pts
+                </div>
+                <div class="stat">
+                    <i class="fas fa-level-up-alt"></i>
+                    Level <span>{{ user_data.level }}</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
     <div class="container">
-        <h1>Recycling Guide for: {{ item }}</h1>
+        <div class="main-content">
+            <div class="item-header">
+                <i class="fas fa-{{ 'recycle' if points > 0 else 'question-circle' }} item-icon"></i>
+                <div>
+                    <div class="item-name">{{ item.title() }}</div>
+                    <div class="item-category">{{ category }}</div>
+                </div>
+            </div>
 
-        <div class="instruction">
-            <h2>How to Recycle:</h2>
-            <p>{{ instruction }}</p>
+            <div class="instruction-card">
+                <h3>How to Recycle:</h3>
+                <p>{{ instruction }}</p>
+            </div>
+
+            {% if points > 0 %}
+            <div class="points-earned">
+                <div>You've earned</div>
+                <div class="points-value">+{{ points }} EcoPoints</div>
+                <div>Keep recycling to earn more rewards!</div>
+            </div>
+            {% endif %}
+
+            <div class="tips-section">
+                <h3>Helpful Tips:</h3>
+                <div class="tips-grid">
+                    {% for tip in tips %}
+                    <div class="tip-card">
+                        <i class="fas fa-lightbulb"></i> {{ tip }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="progress-container">
+                <div class="progress-header">
+                    <div>Progress to Level {{ user_data.level + 1 }}</div>
+                    <div>{{ user_data.points }} / {{ user_data.next_reward }} points</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ (user_data.points / user_data.next_reward * 100) | round }}%"></div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Check Another Item
+                </a>
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
+            </div>
         </div>
-
-        {% if points > 0 %}
-        <div class="points">
-            <h2>You've earned {{ points }} EcoPoints!</h2>
-            <p>Keep recycling to earn more rewards and help the environment.</p>
-        </div>
-        {% endif %}
-
-        <button onclick="window.location.href='/'">Check Another Item</button>
     </div>
+
+    <footer>
+        <p>EcoCycle - Making recycling easier and more rewarding</p>
+    </footer>
 </body>
 </html>
