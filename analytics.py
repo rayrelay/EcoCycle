@@ -60,11 +60,11 @@ class RecyclingAnalytics:
             .limit(5).all()
 
         return {
-            'total_users': total_users,
-            'total_recycled_items': total_recycled_items,
-            'total_points_earned': total_points_earned,
-            'top_recyclers': [{'username': u[0], 'points': u[1]} for u in top_recyclers],
-            'popular_items': [{'item': i[0], 'count': i[1]} for i in popular_items]
+            'total_users': total_users or 0,
+            'total_recycled_items': total_recycled_items or 0,
+            'total_points_earned': total_points_earned or 0,
+            'top_recyclers': [{'username': u[0], 'points': u[1]} for u in top_recyclers] if top_recyclers else [],
+            'popular_items': [{'item': i[0], 'count': i[1]} for i in popular_items] if popular_items else []
         }
 
     @staticmethod
@@ -80,4 +80,4 @@ class RecyclingAnalytics:
 
         distribution = query.group_by(RecyclingItem.category).all()
 
-        return {cat: count for cat, count in distribution}
+        return {cat: count for cat, count in distribution} if distribution else {}

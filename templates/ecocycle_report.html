@@ -3,116 +3,503 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoCycle Reports</title>
+    <title>EcoCycle - Recycling Reports</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* 保持原有的样式，添加报告特定样式 */
+        :root {
+            --primary: #2e8b57;
+            --primary-dark: #24724a;
+            --secondary: #4a90e2;
+            --accent: #f39c12;
+            --light: #f0f8f0;
+            --dark: #333;
+            --gray: #6c757d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--primary);
+            font-size: 28px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            color: var(--primary);
+        }
+
+        .user-stats {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .stat {
+            background-color: var(--light);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat i {
+            color: var(--primary);
+        }
+
+        .main-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-top: 0;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin-top: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 20px;
-            margin: 20px 0;
+            margin: 25px 0;
         }
 
         .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             text-align: center;
+            border-left: 4px solid var(--primary);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            font-size: 2.5em;
+            color: var(--primary);
+            margin-bottom: 15px;
         }
 
         .stat-value {
-            font-size: 2em;
+            font-size: 2.2em;
             font-weight: bold;
             color: var(--primary);
             margin: 10px 0;
         }
 
+        .stat-label {
+            color: var(--gray);
+            font-size: 0.9em;
+        }
+
         .chart-container {
             background: white;
-            padding: 20px;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin: 30px 0;
+            height: 350px;
+            border: 1px solid #e9ecef;
+        }
+
+        .top-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .top-item-card {
+            background: #f8f9fa;
+            padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin: 20px 0;
-            height: 300px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-rank {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--accent);
+            width: 40px;
+            text-align: center;
+        }
+
+        .item-info {
+            flex-grow: 1;
+            padding: 0 15px;
+        }
+
+        .item-count {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+            justify-content: center;
+            border-top: 1px solid #eee;
+            padding-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .community-section {
+            background: linear-gradient(135deg, #f0f8f0 0%, #e0f0e0 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .badge-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .badge-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .chart-container {
+                height: 300px;
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <header>
-        <!-- 保持原有的header -->
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-recycle"></i>
+                <h1>EcoCycle</h1>
+            </div>
+
+            <div class="user-stats">
+                <div class="stat">
+                    <i class="fas fa-coins"></i>
+                    <span>{{ user_data.points }}</span> pts
+                </div>
+                <div class="stat">
+                    <i class="fas fa-level-up-alt"></i>
+                    Level <span>{{ user_data.level }}</span>
+                </div>
+            </div>
+        </div>
     </header>
 
     <div class="container">
         <div class="main-content">
-            <h2>Recycling Analytics & Reports</h2>
+            <div class="section-header">
+                <h2>Recycling Analytics & Reports</h2>
+                <div class="user-badge">
+                    <span class="badge badge-primary">Level {{ user_data.level }}</span>
+                    <span class="badge badge-secondary">{{ user_data.points }} Points</span>
+                </div>
+            </div>
+
+            <p>Track your recycling progress and see how you're contributing to a greener planet!</p>
 
             <!-- Personal Stats -->
-            <h3>Your Recycling Statistics</h3>
+            <h3><i class="fas fa-user"></i> Your Recycling Statistics</h3>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <i class="fas fa-coins"></i>
+                    <div class="stat-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
                     <div class="stat-value">{{ user_stats.total_points }}</div>
-                    <div>Total Points Earned</div>
+                    <div class="stat-label">Total Points Earned</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-recycle"></i>
+                    <div class="stat-icon">
+                        <i class="fas fa-recycle"></i>
+                    </div>
                     <div class="stat-value">{{ user_stats.total_items }}</div>
-                    <div>Items Recycled</div>
+                    <div class="stat-label">Items Recycled</div>
                 </div>
                 <div class="stat-card">
-                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
                     <div class="stat-value">{{ user_stats.weekly_activity }}</div>
-                    <div>This Week</div>
+                    <div class="stat-label">Recycled This Week</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="stat-value">{{ user_stats.most_recycled_item or 'None' }}</div>
+                    <div class="stat-label">Most Recycled Item</div>
+                </div>
+            </div>
+
+            <!-- Category Distribution Chart -->
+            <h3><i class="fas fa-chart-pie"></i> Recycling by Category</h3>
+            <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
             </div>
 
             <!-- Community Stats -->
-            <h3>Community Statistics</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <i class="fas fa-users"></i>
-                    <div class="stat-value">{{ community_stats.total_users }}</div>
-                    <div>Total Users</div>
+            <div class="community-section">
+                <h3><i class="fas fa-users"></i> Community Impact</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value">{{ community_stats.total_users }}</div>
+                        <div class="stat-label">EcoCycle Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div class="stat-value">{{ community_stats.total_recycled_items }}</div>
+                        <div class="stat-label">Total Items Recycled</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-globe-americas"></i>
+                        </div>
+                        <div class="stat-value">{{ community_stats.total_points_earned }}</div>
+                        <div class="stat-label">Community Points</div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-leaf"></i>
-                    <div class="stat-value">{{ community_stats.total_recycled_items }}</div>
-                    <div>Total Items Recycled</div>
+
+                <!-- Top Recyclers -->
+                {% if community_stats.top_recyclers %}
+                <h4>Top Recyclers</h4>
+                <div class="top-items">
+                    {% for recycler in community_stats.top_recyclers %}
+                    <div class="top-item-card">
+                        <div class="item-rank">#{{ loop.index }}</div>
+                        <div class="item-info">
+                            <div>{{ recycler.username }}</div>
+                        </div>
+                        <div class="item-count">{{ recycler.points }} pts</div>
+                    </div>
+                    {% endfor %}
                 </div>
+                {% endif %}
             </div>
 
-            <!-- Charts will be implemented with JavaScript -->
-            <div class="chart-container">
-                <canvas id="categoryChart"></canvas>
+            <!-- Navigation Actions -->
+            <div class="actions">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Check Another Item
+                </a>
+                <a href="/" class="btn btn-secondary">
+                    <i class="fas fa-home"></i> Back to Home
+                </a>
             </div>
         </div>
     </div>
 
+    <footer>
+        <p>EcoCycle - Making recycling easier and more rewarding</p>
+    </footer>
+
     <script>
         // Initialize charts
         const categoryData = {{ category_dist | tojson }};
+
+        // Prepare data for chart
+        const labels = Object.keys(categoryData);
+        const data = Object.values(categoryData);
+        const backgroundColors = [
+            '#4a90e2', '#f39c12', '#2e8b57', '#95a5a6',
+            '#e74c3c', '#c0392b', '#8e44ad', '#16a085',
+            '#d35400', '#27ae60', '#2980b9', '#8e44ad'
+        ];
+
         const ctx = document.getElementById('categoryChart').getContext('2d');
         new Chart(ctx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
-                labels: Object.keys(categoryData),
+                labels: labels,
                 datasets: [{
-                    data: Object.values(categoryData),
-                    backgroundColor: ['#4a90e2', '#f39c12', '#2e8b57', '#95a5a6', '#e74c3c', '#c0392b', '#8e44ad']
+                    data: data,
+                    backgroundColor: backgroundColors.slice(0, labels.length),
+                    borderWidth: 2,
+                    borderColor: '#fff'
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            boxWidth: 15,
+                            padding: 15
+                        }
+                    },
                     title: {
                         display: true,
-                        text: 'Recycling by Category'
+                        text: 'Your Recycling by Category',
+                        font: {
+                            size: 16
+                        }
                     }
-                }
+                },
+                cutout: '50%'
             }
+        });
+
+        // Add animation to stat cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Animate stat cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(card);
         });
     </script>
 </body>

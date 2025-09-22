@@ -157,11 +157,17 @@ def report():
     community_stats = RecyclingAnalytics.get_community_stats()
     category_dist = RecyclingAnalytics.get_category_distribution(user.id)
 
+    # 获取用户最近回收记录
+    recent_records = RecyclingRecord.query.filter_by(user_id=user.id) \
+        .order_by(RecyclingRecord.recycled_at.desc()) \
+        .limit(5).all()
+
     return render_template('ecocycle_report.html',
                            user_data=user.to_dict(),
                            user_stats=user_stats,
                            community_stats=community_stats,
-                           category_dist=category_dist)
+                           category_dist=category_dist,
+                           recent_records=recent_records)
 
 
 if __name__ == '__main__':

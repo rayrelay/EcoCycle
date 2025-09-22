@@ -200,6 +200,66 @@
             border-color: var(--primary);
         }
 
+        /* 优化报告按钮样式 */
+        .report-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--light);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-report {
+            background-color: var(--secondary);
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 30px;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+        }
+
+        .btn-report:hover {
+            background-color: #3a7bc8;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(74, 144, 226, 0.4);
+        }
+
         footer {
             text-align: center;
             padding: 20px;
@@ -215,6 +275,11 @@
 
             .examples {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .btn-report {
+                padding: 12px 20px;
+                font-size: 16px;
             }
         }
     </style>
@@ -252,7 +317,7 @@
                     <div id="search-results"></div>
                 </div>
 
-                <button type="submit" class="btn-primary">
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-recycle"></i> How to Recycle
                 </button>
             </form>
@@ -299,9 +364,12 @@
                 </div>
             </div>
 
-            <div class="actions" style="margin-top: 20px;">
-                <a href="/report" class="btn btn-secondary">
-                    <i class="fas fa-chart-bar"></i> View Reports
+            <!-- 优化的报告按钮部分 -->
+            <div class="report-section">
+                <h3>Track Your Recycling Progress</h3>
+                <p>View detailed analytics and reports on your recycling habits</p>
+                <a href="/report" class="btn btn-report">
+                    <i class="fas fa-chart-bar"></i> View Reports & Analytics
                 </a>
             </div>
         </div>

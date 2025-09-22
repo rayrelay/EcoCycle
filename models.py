@@ -39,6 +39,7 @@ class User(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'username': self.username,
             'points': self.points,
             'level': self.level,
             'next_reward': self.next_reward
@@ -54,6 +55,7 @@ class RecyclingRecord(db.Model):
     points_earned = db.Column(db.Integer, nullable=False)
     recycled_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # Define relationship
     user = db.relationship('User', backref=db.backref('records', lazy=True))
 
 
@@ -64,3 +66,10 @@ class Category(db.Model):
     name = db.Column(db.String(50), unique=True, nullable=False)
     color = db.Column(db.String(7), default='#2e8b57')  # Hex color
     description = db.Column(db.Text)
+
+    def to_dict(self):
+        return {
+            'name': self.name,
+            'color': self.color,
+            'description': self.description
+        }
