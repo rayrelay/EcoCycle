@@ -259,9 +259,11 @@
 
             <div class="categories">
                 <div class="category-filter active" data-category="all">All</div>
-                {% for category in categories %}
-                <div class="category-filter" data-category="{{ category.name }}">{{ category.name }}</div>
-                {% endfor %}
+                <div class="category-filter" data-category="Plastic">Plastic</div>
+                <div class="category-filter" data-category="Paper">Paper</div>
+                <div class="category-filter" data-category="Glass">Glass</div>
+                <div class="category-filter" data-category="Metal">Metal</div>
+                <div class="category-filter" data-category="E-Waste">E-Waste</div>
             </div>
 
             <div class="examples">
@@ -297,12 +299,6 @@
                     <i class="fas fa-shopping-bag"></i>
                     <div>Plastic Bag</div>
                 </div>
-            </div>
-
-            <div class="actions" style="margin-top: 20px;">
-                <a href="/report" class="btn btn-secondary">
-                    <i class="fas fa-chart-bar"></i> View Reports
-                </a>
             </div>
         </div>
     </div>

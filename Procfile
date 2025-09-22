@@ -1,1 +1,1 @@
-web: gunicorn ecocycle_demo:app
+web: gunicorn ecocycle_app:app

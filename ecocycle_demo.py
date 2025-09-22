@@ -73,7 +73,7 @@ user_data = {
 
 @app.route('/')
 def index():
-    return render_template('ecocycle_index.html')
+    return render_template('ecocycle_index_demo.html')
 
 
 @app.route('/recycle', methods=['POST'])
@@ -97,7 +97,7 @@ def recycle():
             user_data["level"] += 1
             user_data["next_reward"] = user_data["level"] * 50
 
-        return render_template('ecocycle_results.html',
+        return render_template('ecocycle_results_demo.html',
                                item=item,
                                instruction=guide["instruction"],
                                points=points,
@@ -105,7 +105,7 @@ def recycle():
                                tips=guide["tips"],
                                user_data=user_data)
     else:
-        return render_template('ecocycle_results.html',
+        return render_template('ecocycle_results_demo.html',
                                item=item,
                                instruction="We're not sure how to recycle this item. Please check with your local recycling facility.",
                                points=0,
@@ -126,3 +126,6 @@ def api_search():
                 results.append({"item": item, "category": data["category"]})
 
     return jsonify(results)
+
+if __name__ == '__main__':
+    app.run(debug=True)
